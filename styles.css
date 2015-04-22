@@ -16,13 +16,14 @@ body {
 .table-container {
   margin: 0 auto;
   width: 300px;
-  height: 300px;
+  height: 280px;
   overflow: hidden;
 }
 
 .game-board {
-  margin: -3px;
+  margin: -5px;
   border-spacing: 0;
+  text-align: center;
 }
 
 .row {
