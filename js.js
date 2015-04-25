@@ -70,9 +70,15 @@ var computerTurn = function(el) {
     computerFinishesTurn();
     return;
   }
-
   // search for spot that is adjacent and has multiple spots open
   strategicMove();
+  if (success) {
+    computerFinishesTurn();
+    return;
+  }
+
+  // search for spot that has only one spot open
+  strategicMove2();
   if (success) {
     computerFinishesTurn();
     return;
@@ -371,7 +377,7 @@ function takeMiddle() {
 }
 
 function middleTaken() {
-  if (array[1][1] === "x") {
+  if (array[1][1] === "x" && array[0][0] !== "o") {
     $(".00").text("o");
     success = true;
   }
@@ -387,10 +393,12 @@ function strategicMove() {
     return;
   }
   strategicRow();
+
 }
 
 function strategicDiagonal() {
   var oArray = [];
+  var xArray = [];
   var found = false;
   for (var i = 0; i < array.length; i++) {
     if (array[i][i] === "o") {
@@ -399,8 +407,12 @@ function strategicDiagonal() {
       var findClass = i.toString() + i.toString();
       $("."+findClass).addClass("temp");
     }
+    if (array[i][i] === "x") {
+      xArray.push(array[i][i]);
+    }
   }
-  if (oArray.length === 1) {
+  // debugger;
+  if (oArray.length === 1 && xArray.length === 0) {
     found = true;
     success = true;
     $($(".temp")[0]).text("o");
@@ -411,6 +423,7 @@ function strategicDiagonal() {
     return;
   }
   oArray = [];
+  xArray = [];
   for (var i = 0; i < array.length; i++) {
     if (array[i][array.length -1 - i] === "o") {
       oArray.push(array[i][array.length -1 - i]);
@@ -418,8 +431,11 @@ function strategicDiagonal() {
       var findClass = i.toString() + (array.length -1 - i).toString();
       $("."+findClass).addClass("temp");
     }
+    if (array[i][array.length -1 - i] === "x") {
+      xArray.push(array[i][array.length -1 - i]);
+    }
   }
-  if (oArray.length === 1) {
+  if (oArray.length === 1 && xArray.length === 0) {
     success = true;
     $($(".temp")[0]).text("o");
   }
@@ -429,8 +445,10 @@ function strategicDiagonal() {
 function strategicColumn() {
   var found;
   var oArray = [];
+  var xArray = [];
   for (var i = 0; i < array.length; i++){
     oArray = [];
+    xArray = [];
     found = false;
     $(".game-board td").removeClass("temp");
     for (var j = 0; j < array.length; j++){
@@ -440,11 +458,14 @@ function strategicColumn() {
         var findClass = j.toString() + i.toString();
         $("."+findClass).addClass("temp");
       }
+      if (array[j][i] === "x") {
+        xArray.push(array[j][i]);
+      }
     }
-    if (oArray.length === 1) {
+    if (oArray.length === 1 && xArray.length === 0) {
       found = true;
       success = true;
-      $(".temp").text("o");
+      $($(".temp")[0]).text("o");
       break;
     }
   }
@@ -454,8 +475,10 @@ function strategicColumn() {
 function strategicRow() {
   var found;
   var oArray = [];
+  var xArray = [];
   for (var i = 0; i < array.length; i++){
     oArray = [];
+    xArray = [];
     found = false;
     $(".game-board td").removeClass("temp");
     for (var j = 0; j < array.length; j++){
@@ -465,11 +488,132 @@ function strategicRow() {
         var findClass = i.toString() + j.toString();
         $("."+findClass).addClass("temp");
       }
+      if (array[i][j] === "x") {
+        xArray.push(array[i][j]);
+      }
     }
-    if (oArray.length === 1) {
+    if (oArray.length === 1 && xArray.length === 0) {
       success = true;
       found = true;
+      $($(".temp")[0]).text("o");
+      break;
+    }
+  }
+  $(".game-board td").removeClass("temp");
+}
+
+function strategicMove2() {
+  strategicDiagonal2();
+  if (success) {
+    return;
+  }
+  strategicColumn2();
+  if (success) {
+    return;
+  }
+  strategicRow2();
+}
+
+function strategicDiagonal2() {
+  var oArray = [];
+  var xArray = [];
+  var found = false;
+  for (var i = 0; i < array.length; i++) {
+    if (array[i][i] === "o") {
+      oArray.push(array[i][i]);
+    } else if ( array[i][i] !== "x" ) {
+      var findClass = i.toString() + i.toString();
+      $("."+findClass).addClass("temp");
+    }
+    if (array[i][i] === "x") {
+      xArray.push(array[i][i]);
+    }
+  }
+  // debugger;
+  if (oArray.length === 1 && xArray.length === 1) {
+    found = true;
+    success = true;
+    $(".temp").text("o");
+  }
+  $(".game-board td").removeClass("temp");
+  // don't bother with second diagonal if found
+  if (found) {
+    return;
+  }
+  oArray = [];
+  xArray = [];
+  for (var i = 0; i < array.length; i++) {
+    if (array[i][array.length -1 - i] === "o") {
+      oArray.push(array[i][array.length -1 - i]);
+    } else if ( array[i][array.length -1 - i] !== "x" ) {
+      var findClass = i.toString() + (array.length -1 - i).toString();
+      $("."+findClass).addClass("temp");
+    }
+    if (array[i][array.length -1 - i] === "x") {
+      xArray.push(array[i][array.length -1 - i]);
+    }
+  }
+  if (oArray.length === 1 && xArray.length === 1) {
+    success = true;
+    $(".temp").text("o");
+  }
+  $(".game-board td").removeClass("temp");
+}
+
+function strategicColumn2() {
+  var found;
+  var oArray = [];
+  var xArray = [];
+  for (var i = 0; i < array.length; i++){
+    oArray = [];
+    xArray = [];
+    found = false;
+    $(".game-board td").removeClass("temp");
+    for (var j = 0; j < array.length; j++){
+      if (array[j][i] === "o") {
+        oArray.push(array[j][i]);
+      } else if ( array[j][i] !== "x" ) {
+        var findClass = j.toString() + i.toString();
+        $("."+findClass).addClass("temp");
+      }
+      if (array[j][i] === "x") {
+        xArray.push(array[j][i]);
+      }
+    }
+    if (oArray.length === 1 && xArray.length === 1) {
+      found = true;
+      success = true;
       $(".temp").text("o");
+      break;
+    }
+  }
+  $(".game-board td").removeClass("temp");
+}
+
+function strategicRow2() {
+  var found;
+  var oArray = [];
+  var xArray = [];
+  for (var i = 0; i < array.length; i++){
+    oArray = [];
+    xArray = [];
+    found = false;
+    $(".game-board td").removeClass("temp");
+    for (var j = 0; j < array.length; j++){
+      if (array[i][j] === "o") {
+        oArray.push(array[i][j]);
+      } else if ( array[i][j] !== "x" ) {
+        var findClass = i.toString() + j.toString();
+        $("."+findClass).addClass("temp");
+      }
+      if (array[i][j] === "x") {
+        xArray.push(array[i][j]);
+      }
+    }
+    if (oArray.length === 1 && xArray.length === 0) {
+      success = true;
+      found = true;
+      $($(".temp")[0]).text("o");
       break;
     }
   }
