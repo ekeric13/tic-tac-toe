@@ -279,7 +279,6 @@ function checkRowsTwoO() {
 }
 
 function checkColumnsTwoO() {
-
   var found;
   var oArray = [];
   var xArray = [];
