@@ -393,7 +393,6 @@ function strategicMove() {
     return;
   }
   strategicRow();
-
 }
 
 function strategicDiagonal() {
@@ -415,7 +414,7 @@ function strategicDiagonal() {
   if (oArray.length === 1 && xArray.length === 0) {
     found = true;
     success = true;
-    $($(".temp")[0]).text("o");
+    $($(".temp")[1]).text("o");
   }
   $(".game-board td").removeClass("temp");
   // don't bother with second diagonal if found
@@ -437,7 +436,7 @@ function strategicDiagonal() {
   }
   if (oArray.length === 1 && xArray.length === 0) {
     success = true;
-    $($(".temp")[0]).text("o");
+    $($(".temp")[1]).text("o");
   }
   $(".game-board td").removeClass("temp");
 }
@@ -465,7 +464,7 @@ function strategicColumn() {
     if (oArray.length === 1 && xArray.length === 0) {
       found = true;
       success = true;
-      $($(".temp")[0]).text("o");
+      $($(".temp")[1]).text("o");
       break;
     }
   }
@@ -495,7 +494,7 @@ function strategicRow() {
     if (oArray.length === 1 && xArray.length === 0) {
       success = true;
       found = true;
-      $($(".temp")[0]).text("o");
+      $($(".temp")[1]).text("o");
       break;
     }
   }
